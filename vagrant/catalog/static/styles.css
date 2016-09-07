@@ -1,0 +1,7 @@
+body {
+  background-image: url("Elegant_Background-6.jpg");
+}
+
+.navbar-brand, li > a, a {
+  color: white;
+}

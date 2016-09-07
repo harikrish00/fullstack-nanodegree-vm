@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+{% import "bootstrap/wtf.html" as wtf %}
+<div class='container'>
+    <div class="col-md-6">
+        <form method='POST' action="{{url_for('new_restaurant')}}">
+          {{wtf.quick_form(form)}}
+        </form>
+    </div>
+</div>
+{% endblock %}
