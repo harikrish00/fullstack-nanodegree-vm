@@ -5,3 +5,53 @@ body {
 .navbar-brand, li > a, a {
   color: white;
 }
+
+/*.restaurant {
+  width: 70%;
+  height: auto;
+  background-color: grey;
+  color: white;
+  border-radius: 20px;
+  opacity: 10;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}*/
+
+.restaurant{
+  width: 100%;
+  height: auto;
+  background: red; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #00a1ff, #00ffa1); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #00a1ff, #00ffa1); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #00a1ff, #00ffa1); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #00a1ff, #00ffa1); /* Standard syntax */
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  /*border-style: solid;*/
+}
+
+.restaurant_list {
+ list-style-type: none;
+ text-align: center;
+ padding: 10px;
+}
+
+.highlight li:hover {
+  background-color: #05a0dc;
+  opacity: 0.5;
+}
+
+.action {
+  font-size: 12px;
+  color: black;
+}
+
+li[class^="restaurant_item"] {
+  margin-top: 10px;
+  font-size: 20px;
+  font-family: lato;
+}
