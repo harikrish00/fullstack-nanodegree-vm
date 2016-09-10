@@ -7,12 +7,12 @@
 // });
 // });
 
-$(document).ready(function(){
-  $('.action').hide();
-  $('.restaurant_items').hover(function(){
-    $('.action').show();
-  },
-  function(){
-    $('.action').hide();
-  });
-});
+// $(document).ready(function(){
+//   $('.action').hide();
+//   $('.restaurant_items').hover(function(){
+//     $('.action').show();
+//   },
+//   function(){
+//     $('.action').hide();
+//   });
+// });

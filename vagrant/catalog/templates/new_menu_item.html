@@ -5,15 +5,11 @@
         <h3> Add new menu item</h3>
         <div class="col-md-6">
             <form method='POST' action={{url_for('new_menu_item', restaurant_id=restaurant_id)}}>
-                {{wtf.quick_form(form)}}
-              <!-- Name:
-              <p><input type='text' name='menuitem'/></p>
-              Description:
-              <p><input type='text' name='description'/></p>
-              Price:
-              <p><input type='text' name='price'/></p>
-              <p><input type='submit' value='Submit'/></p> -->
+                <div class="forms">
+                    {{wtf.quick_form(form)}}
+                </div>
             </form>
+            <a href="{{url_for('restaurant_menu',restaurant_id=restaurant_id)}}">Cancel</a>
         </div>
     </div>
 {% endblock %}

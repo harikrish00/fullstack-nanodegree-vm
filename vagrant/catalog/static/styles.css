@@ -1,9 +1,14 @@
 body {
-  background-image: url("Elegant_Background-6.jpg");
+  /*background-image: url("Elegant_Background-6.jpg");*/
+  background-color: #ab839b;
 }
 
 .navbar-brand, li > a, a {
   color: white;
+}
+
+.alert-sucess {
+  background-color: #ab839b;
 }
 
 /*.restaurant {
@@ -17,6 +22,53 @@ body {
   margin-left: auto;
   margin-right: auto;
 }*/
+
+.forms {
+  color: white;
+}
+
+
+.item-name {
+  width: 50%;
+  font-size: 30px;
+  color: white;
+  display: inline-block;
+  font-family: Lato, sans-serif;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.item-price {
+  width: 50%;
+  padding-top: 10px;
+  padding-right: 30px;
+  font-size: 18px;
+  color: #03f4ed;
+  text-align: right;
+}
+
+.item-desc {
+    padding-top: 10px;
+    font-style: italic;
+    font-size: 12px;
+    color: #f0f8ff;
+}
+
+.menuitem {
+  width: 80%;
+  border-radius: 5px;
+  border-color: #d8a5a5;
+  border-style: double;
+  margin: 5px;
+  margin-bottom: 15px;
+}
 
 .restaurant{
   width: 100%;
@@ -36,7 +88,7 @@ body {
 
 .restaurant_list {
  list-style-type: none;
- text-align: center;
+ text-align: left;
  padding: 10px;
 }
 
@@ -47,7 +99,11 @@ body {
 
 .action {
   font-size: 12px;
-  color: black;
+  color: gray;
+}
+
+.navbar-brand {
+  font-size: 40px;
 }
 
 li[class^="restaurant_item"] {
