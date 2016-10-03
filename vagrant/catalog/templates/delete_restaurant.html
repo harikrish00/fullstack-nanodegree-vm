@@ -1,9 +1,12 @@
-<html>
-<body>
-  <h1> Are you sure you want to delete {{restaurant.name}}? </h1>
-  <form action="{{ url_for('delete_restaurant',restaurant_id = restaurant.id)}}" method = 'POST'>
-    <input type='submit', value = 'Delete'>
-  </form>
-  <a href = "{{ url_for('restaurant_index')}}"> Cancel </a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="jumbotron">
+    <h3> Are you sure you want to delete {{restaurant.name}}? </h3>
+    <form action="{{ url_for('delete_restaurant',restaurant_id = restaurant.id)}}" method = 'post'>
+      <input type='submit' value = 'Delete' class="btn btn-sm btn-danger">
+    </form>
+    <a href = "{{ url_for('restaurant_index')}}" style="color: black"> Cancel </a>
+  </div>
+</div>
+{% endblock %}

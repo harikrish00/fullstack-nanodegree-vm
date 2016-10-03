@@ -21,16 +21,25 @@ def create_tournament(name=''):
     conn.close()
     return t_id
 
-def deleteTable(table_name):
-    """Remove all the records from the given table."""
+def delete_tournament():
+    """Remove all the records from the tournaments."""
     conn = connect()
     cursor = conn.cursor()
-    query = "delete from " + table_name
+    query = "delete from tournaments"
     cursor.execute(query);
     conn.commit()
     conn.close()
 
-def countPlayers(t_id):
+def delete_table(t_id, table_name):
+    """Remove all the records from the given table."""
+    conn = connect()
+    cursor = conn.cursor()
+    query = "delete from %s where t_id=%d" % (table_name, t_id)
+    cursor.execute(query);
+    conn.commit()
+    conn.close()
+
+def count_players(t_id):
     """Returns the number of players currently registered."""
     conn = connect()
     cursor = conn.cursor()
@@ -48,7 +57,7 @@ def player_with_byes(t_id):
     conn.close()
     return player_byes
 
-def registerPlayer(t_id, name):
+def register_player(t_id, name):
     """Adds a player to the tournament database.
 
     The database assigns a unique serial id number for the player.  (This
@@ -60,7 +69,8 @@ def registerPlayer(t_id, name):
     """
     conn = connect()
     cursor = conn.cursor()
-    cursor.execute("insert into players (t_id, name) values (%d, '%s')" % (t_id, name))
+    sql = "insert into players (t_id, name) values (%s, %s)"
+    cursor.execute(sql, (t_id, name))
     conn.commit()
     conn.close()
 
@@ -83,7 +93,7 @@ def player_match_points(t_id, match_id):
     conn.close()
     return points
 
-def playerStandings(t_id):
+def player_standings(t_id):
     """Returns a list of the players and their win records, sorted by wins.
 
     The first entry in the list should be the player in first place, or a player
@@ -103,22 +113,25 @@ def playerStandings(t_id):
     conn.close()
     return standings
 
-def reportMatch(t_id, match_id, winner, loser, draw = False):
+def report_match(t_id, match_id, winner, loser, draw = False):
     """Records the outcome of a single match between two players.
 
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
+      draw: A boolean, to report a match draw. Carries default value of False.
     """
     conn = connect()
     cursor = conn.cursor()
     cursor.execute("insert into match_results(t_id, match_id, winner, loser, draw) \
                         values(%d, %d, %d, %d, %s)" % (t_id, match_id, winner, loser, draw))
 
+    # If match is draw then assign one point for each player
     if draw == True:
         winner_points = 1
         loser_points = 1
     else:
+        # if match is not a draw then winner gets 3 points
         winner_points = 3
         loser_points = 0
 
@@ -138,6 +151,8 @@ def player_with_no_bye(t_id):
     return player
 
 def report_bye(t_id, player_id):
+    """ Records bye for a user when there are odd number of players registered for the tournament """
+
     conn = connect()
     cursor = conn.cursor()
     cursor.execute("insert into matches (t_id, player_one) values(%d, %d)" % (t_id,player_id))
@@ -168,7 +183,7 @@ def swiss_pairings(t_id):
         id2: the second player's unique id
         name2: the second player's name
     """
-    standings = playerStandings(t_id)
+    standings = player_standings(t_id)
     total_players = len(standings)
     game_pairs = []
     #standings are always ordered by wins descending, and if the first player

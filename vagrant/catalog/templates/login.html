@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="signinButton">
+  <span class="g-signin"
+    data-scope="openid email"
+    data-clientid="159725225620-rjevtceqd4bcndr91ng9fm67lbipecu7.apps.googleusercontent.com"
+    data-redirecturi="postmessage"
+    data-accesstype="offline"
+    data-cookiepolicy="single_host_origin"
+    data-callback="signInCallback"
+    data-approvalprompt="force">
+  </span>
+</div>
+<div id="result"></div>
+<script>
+  function signInCallback(authResult) {
+    if (authResult['code']) {
+      $('#signinButton').attr('style','display: none');
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: '/gconnect?state={{STATE}}',
+      processData: false,
+      contentType: 'application/octet-stream; charset=utf-8',
+      data: authResult['code'],
+      success: function(result){
+        if(result) {
+          $('#result').html('Login Successful !<br>' + result + '</br> Redirecting...' )
+          setTimeout(function(){
+            window.location.href = '/restaurants';
+          }, 4000)
+        } else if(authResult['error']){
+          console.log('There was an error:' + authResult['error']);
+        } else {
+          $('#result').html(" Failed to make call to server, something went wrong");
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

@@ -20,37 +20,37 @@ CREATE TABLE tournaments (
 CREATE TABLE players (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
-  t_id INTEGER REFERENCES tournaments(id)
+  t_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE
 );
 
 CREATE TABLE matches (
   id SERIAL PRIMARY KEY,
-  player_one INTEGER REFERENCES players(id) ON DELETE CASCADE,
-  player_two INTEGER REFERENCES players(id) ON DELETE CASCADE,
-  t_id INTEGER REFERENCES tournaments(id)
+  player_one INTEGER REFERENCES players(id),
+  player_two INTEGER REFERENCES players(id),
+  t_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE
 );
 
 CREATE TABLE match_results (
   id SERIAL PRIMARY KEY,
-  match_id INTEGER REFERENCES matches(id) ON DELETE CASCADE,
-  winner INTEGER REFERENCES players(id) ON DELETE CASCADE,
-  loser INTEGER REFERENCES players(id) ON DELETE CASCADE,
+  match_id INTEGER REFERENCES matches(id),
+  winner INTEGER REFERENCES players(id),
+  loser INTEGER REFERENCES players(id),
   draw BOOLEAN,
-  t_id INTEGER REFERENCES tournaments(id)
+  t_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE
 );
 
 CREATE TABLE player_match_points(
   id SERIAL PRIMARY KEY,
-  match_id INTEGER REFERENCES matches(id) ON DELETE CASCADE,
-  player_id INTEGER REFERENCES players(id) ON DELETE CASCADE,
-  t_id INTEGER REFERENCES tournaments(id),
+  match_id INTEGER REFERENCES matches(id),
+  player_id INTEGER REFERENCES players(id),
+  t_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
   points INTEGER
 );
 
 CREATE TABLE player_byes(
-    player_id INTEGER REFERENCES players(id) ON DELETE CASCADE,
+    player_id INTEGER REFERENCES players(id),
     bye INTEGER DEFAULT 0,
-    t_id INTEGER REFERENCES tournaments(id)
+    t_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE
 );
 
 CREATE VIEW standings AS

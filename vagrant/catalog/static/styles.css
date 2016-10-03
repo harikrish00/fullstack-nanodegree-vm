@@ -3,7 +3,11 @@ body {
   background-color: #ab839b;
 }
 
-.navbar-brand, li > a, a {
+.navbar-brand, a {
+  color: #00cfd0;
+}
+
+li > a {
   color: white;
 }
 
@@ -104,6 +108,13 @@ hr {
 
 .navbar-brand {
   font-size: 40px;
+}
+
+.menu-action {
+  font-size: 12px;
+  padding-top: 10px;
+  border-style: solid;
+  border: 1px;
 }
 
 li[class^="restaurant_item"] {
