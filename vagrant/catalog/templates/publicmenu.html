@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+{% include "flash.html" %}
+<h1>{{restaurant.name}}</h1>
+{% for i in items %}
+  <div class="row menuitem">
+    <div class="col-md-6 item-name">
+      {{i.name}}
+    </div>
+    <div class="col-md-6 item-price">
+      {{i.price}}
+    </div>
+    <div class="col-md-12">
+      <p class="item-desc">
+        {{i.description}}<br />
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+<a href={{ url_for('new_menu_item', restaurant_id=restaurant.id) }} class="btn btn-small btn-primary">Create New Menu Item</a>
+{% endblock %}
+</div>
