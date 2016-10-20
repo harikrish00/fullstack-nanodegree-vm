@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 from flask_bootstrap import Bootstrap
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
@@ -104,6 +104,16 @@ def fbconnect():
     return output
 
 
+@app.route('/fbdisconnect')
+def fbdisconnect():
+    facebook_id = login_session['facebook_id']
+    # The access token must me included to successfully logout
+    access_token = login_session['access_token']
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+    return "you have been logged out"
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -175,6 +185,7 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    login_session['provider'] = 'google'
 
     user_id = get_user_id(login_session['email'])
     if not user_id:
@@ -196,27 +207,67 @@ def gconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
-    access_token = login_session['access_token']
-    if access_token is None:
-        response = make_response(json.dumps('Current user not connected.'),401)
+    # Only disconnect a connected user.
+    credentials = login_session.get('credentials')
+    if credentials is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    access_token = credentials.access_token
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
-    result = h.request(url,'GET')[0]
-    if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
+    result = h.request(url, 'GET')[0]
+    if result['status'] != '200':
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['access_token']
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+
         del login_session['username']
         del login_session['email']
         del login_session['picture']
-        response = make_response(json.dumps('User successfully disconnected'),200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('restaurant_index'))
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        flash("You were not logged in")
+        return redirect(url_for('restaurant_index'))
+
+
+# JSON APIs to view Restaurant Information
+@app.route('/restaurant/<int:restaurant_id>/JSON')
+def restaurant_menu_json(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(
+        restaurant_id=restaurant_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+
+@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+def menu_item_json(restaurant_id, menu_id):
+    Menu_Item = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(Menu_Item=Menu_Item.serialize)
+
+
+@app.route('/restaurants/JSON')
+def restaurants_json():
+    restaurants = session.query(Restaurant).all()
+    return jsonify(restaurants=[r.serialize for r in restaurants])
+
 
 @app.route('/')
 @app.route('/restaurants')
@@ -303,7 +354,8 @@ def new_menu_item(restaurant_id):
         name = form.name.data
         description = form.description.data
         price = form.price.data
-        item = MenuItem(name=name, description=description, price=price, restaurant_id=restaurant_id)
+        course = form.course.data
+        item = MenuItem(name=name, description=description, price=price, course=course, restaurant_id=restaurant_id)
         session.add(item)
         session.commit()
         flash('New menu item has been created','success')

@@ -3,21 +3,43 @@
 <div class="container">
 {% include "flash.html" %}
 <h1>{{restaurant.name}}</h1>
-{% for i in items %}
-  <div class="row menuitem">
-    <div class="col-md-6 item-name">
-      {{i.name}}
+  <div class="row">
+    <div class="col-md-4">
+      <h2 class="course-heading">Appetizer</h2>
+      {% for i in items %}
+        {% if i.course == 'Appetizer' %}
+          <div class="menuitem">
+            <div class="item-name">{{i.name}}</div>
+            <div class="item-desc">{{i.description}}</div>
+            <p class="item-price">{{i.price}}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
-    <div class="col-md-6 item-price">
-      {{i.price}}
+    <div class="col-md-4">
+      <h2 class="course-heading">Entree</h2>
+      {% for i in items %}
+        {% if i.course == 'Entree' %}
+          <div class="menuitem">
+            <div class="item-name">{{i.name}}</div>
+            <div class="item-desc">{{i.description}}</div>
+            <p class="item-price">{{i.price}}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
-    <div class="col-md-12">
-      <p class="item-desc">
-        {{i.description}}<br />
-      </p>
-    </div>
-  </div>
-  {% endfor %}
+    <div class="col-md-4">
+      <h2 class="course-heading">Dessert</h2>
+      {% for i in items %}
+        {% if i.course == 'Dessert' %}
+          <div class="menuitem">
+            <div class="item-name">{{i.name}}</div>
+            <div class="item-desc">{{i.description}}</div>
+            <p class="item-price">{{i.price}}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+   </div>
 <a href={{ url_for('new_menu_item', restaurant_id=restaurant.id) }} class="btn btn-small btn-primary">Create New Menu Item</a>
 {% endblock %}
-</div>

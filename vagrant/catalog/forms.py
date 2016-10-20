@@ -10,4 +10,5 @@ class RestaurantMenuForm(Form):
     name = StringField('Name:', validators=[Required()])
     description = TextAreaField('Description:')
     price = StringField('Price:',validators=[Required()])
+    course = StringField('Course:',validators=[Required()])
     submit = SubmitField('Submit')

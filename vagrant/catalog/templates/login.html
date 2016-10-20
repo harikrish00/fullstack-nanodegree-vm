@@ -51,7 +51,6 @@
 }(document, 'script', 'facebook-jssdk'));
 
 function sendTokenToServer() {
-  alert("hi");
   var access_token = FB.getAuthResponse()['accessToken'];
   console.log(access_token)
   console.log('Welcome!  Fetching your information.... ');
@@ -68,7 +67,7 @@ function sendTokenToServer() {
       if (result) {
         $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
        setTimeout(function() {
-        window.location.href = "/restaurant";
+        window.location.href = "/restaurants";
        }, 4000);
 
     } else {
