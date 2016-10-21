@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
+<!--BEGIN GOOGLE SIGN IN -->
 <div id="signinButton">
   <span class="g-signin"
-    data-scope="openid email"
-    data-clientid="159725225620-rjevtceqd4bcndr91ng9fm67lbipecu7.apps.googleusercontent.com"
-    data-redirecturi="postmessage"
-    data-accesstype="offline"
-    data-cookiepolicy="single_host_origin"
-    data-callback="signInCallback"
-    data-approvalprompt="force">
-  </span>
+  data-scope="openid email"
+  data-clientid="159725225620-rjevtceqd4bcndr91ng9fm67lbipecu7.apps.googleusercontent.com"
+  data-redirecturi="postmessage"
+  data-accesstype="offline"
+  data-cookiepolicy="single_host_origin"
+  data-callback="signInCallback"
+  data-approvalprompt="force">
+</span>
 </div>
 <div id="result"></div>
 <script>
@@ -39,8 +40,10 @@
     });
   }
 </script>
+<!--END FACEBOOK SIGN IN -->
 
 
+<!--BEGIN FACEBOOK SIGN IN -->
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -56,26 +59,26 @@ function sendTokenToServer() {
   console.log('Welcome!  Fetching your information.... ');
   FB.api('/me', function(response) {
     console.log('Successful login for: ' + response.name);
-   $.ajax({
-    type: 'POST',
-    url: '/fbconnect?state={{STATE}}',
-    processData: false,
-    data: access_token,
-    contentType: 'application/octet-stream; charset=utf-8',
-    success: function(result) {
-      // Handle or verify the server response if necessary.
-      if (result) {
-        $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-       setTimeout(function() {
-        window.location.href = "/restaurants";
-       }, 4000);
+    $.ajax({
+      type: 'POST',
+      url: '/fbconnect?state={{STATE}}',
+      processData: false,
+      data: access_token,
+      contentType: 'application/octet-stream; charset=utf-8',
+      success: function(result) {
+        // Handle or verify the server response if necessary.
+        if (result) {
+          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+          setTimeout(function() {
+            window.location.href = "/restaurants";
+          }, 4000);
 
-    } else {
-      $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-       }
-    }
+        } else {
+          $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+        }
+      }
 
-});
+    });
   });
 }
 </script>
